@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine?</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 25px;
+      color: #e63946;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    button:hover {
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    .yes {
+      background-color: #e63946;
+      color: white;
+    }
+
+    .no {
+      background-color: #f1f1f1;
+      color: #555;
+      position: absolute;
+    }
+
+    .response {
+      margin-top: 25px;
+      font-size: 1.4rem;
+      color: #2a9d8f;
+      display: none;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #777;
+      margin-bottom: 10px;
+    }
+  </style>
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5c6c8b7c59.mp3" type="audio/mpeg">
+  </audio>
+</head>
+<body>
+  <div class="card">
+    <div class="subtitle">Please choose wisely 😌</div>
+    <h1>Yarizbel, will you be my Valentine? ❤️</h1>
+
+    <div class="buttons" id="buttonArea">
+      <button class="yes" onclick="sayYes()">Yes 💕</button>
+      <button class="no" id="noBtn">No 🙈</button>
+    </div>
+
+    <div class="response" id="response"></div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const buttonArea = document.getElementById('buttonArea');
+    const responses = [
+      "Hey! That was rude 😤",
+      "Nice try 😏",
+      "Absolutely not 🚫",
+      "The answer is obviously yes 🙄",
+      "You can’t escape love 💘",
+      "Caught you trying to click No 👀"
+    ];
+
+    noBtn.addEventListener('mouseenter', () => { startMusic(); moveNo(); });
+    noBtn.addEventListener('click', () => { startMusic(); moveNo(); });
+
+    function moveNo() {
+      const areaRect = buttonArea.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = areaRect.width - btnRect.width;
+      const maxY = areaRect.height - btnRect.height;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function startMusic() {
+      const music = document.getElementById('bgMusic');
+      if (music.paused) {
+        music.volume = 0.4;
+        music.play().catch(() => {});
+      }
+    }
+
+    function sayYes() {
+      startMusic();
+      const r = document.getElementById('response');
+      r.style.display = 'block';
+      r.textContent = responses[Math.floor(Math.random() * responses.length)] + " 💖 Valentine secured!";
+    }
+  </script>
+</body>
+</html>
