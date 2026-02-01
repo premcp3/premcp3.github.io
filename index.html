@@ -33,12 +33,19 @@
       color: #e63946;
     }
 
+    .subtitle {
+      font-size: 0.95rem;
+      color: #777;
+      margin-bottom: 10px;
+    }
+
     .buttons {
       display: flex;
       justify-content: center;
       gap: 20px;
       margin-top: 20px;
       position: relative;
+      height: 100px;
     }
 
     button {
@@ -48,7 +55,6 @@
       border-radius: 30px;
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
-      position: relative;
     }
 
     button:hover {
@@ -58,6 +64,7 @@
     .yes {
       background-color: #e63946;
       color: white;
+      position: relative;
     }
 
     .no {
@@ -73,15 +80,7 @@
       display: none;
     }
 
-    .subtitle {
-      font-size: 0.95rem;
-      color: #777;
-      margin-bottom: 10px;
-    }
   </style>
-  <audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5c6c8b7c59.mp3" type="audio/mpeg">
-  </audio>
 </head>
 <body>
   <div class="card">
@@ -89,17 +88,25 @@
     <h1>Yarizbel, will you be my Valentine? ❤️</h1>
 
     <div class="buttons" id="buttonArea">
-      <button class="yes" onclick="sayYes()">Yes 💕</button>
+      <button class="yes" id="yesBtn">Yes 💕</button>
       <button class="no" id="noBtn">No 🙈</button>
     </div>
 
     <div class="response" id="response"></div>
   </div>
 
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5c6c8b7c59.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
     const buttonArea = document.getElementById('buttonArea');
-    const responses = [
+    const response = document.getElementById('response');
+    const music = document.getElementById('bgMusic');
+
+    const messages = [
       "Hey! That was rude 😤",
       "Nice try 😏",
       "Absolutely not 🚫",
@@ -108,36 +115,34 @@
       "Caught you trying to click No 👀"
     ];
 
-    noBtn.addEventListener('mouseenter', () => { startMusic(); moveNo(); });
-    noBtn.addEventListener('click', () => { startMusic(); moveNo(); });
-
-    function moveNo() {
-      const areaRect = buttonArea.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
-
-      const maxX = areaRect.width - btnRect.width;
-      const maxY = areaRect.height - btnRect.height;
-
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
-
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    }
-
-    function startMusic() {
-      const music = document.getElementById('bgMusic');
+    // Start music on first interaction anywhere
+    document.addEventListener('click', () => {
       if (music.paused) {
         music.volume = 0.4;
         music.play().catch(() => {});
       }
+    }, { once: true });
+
+    // Move No button
+    function moveNo() {
+      const areaRect = buttonArea.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+      const maxX = areaRect.width - btnRect.width;
+      const maxY = areaRect.height - btnRect.height;
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    function sayYes() {
-      startMusic();
-      const r = document.getElementById('response');
-      r.style.display = 'block';
-      r.textContent = responses[Math.floor(Math.random() * responses.length)] + " 💖 Valentine secured!";
-    }
+    noBtn.addEventListener('mouseenter', moveNo);
+    noBtn.addEventListener('click', moveNo);
+
+    // Yes button clicked
+    yesBtn.addEventListener('click', () => {
+      response.style.display = 'block';
+      response.textContent = messages[Math.floor(Math.random() * messages.length)] + " 💖 Valentine secured!";
+    });
   </script>
 </body>
 </html>
+
